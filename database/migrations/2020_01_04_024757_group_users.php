@@ -17,6 +17,7 @@ class GroupUsers extends Migration
         {
             $table->uuid('id');
             $table->string('group_name');
+            $table->string('photo');
             $table->uuid('users_id')->index();
         });
     }
