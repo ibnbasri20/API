@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers\API;
-
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\User;
@@ -45,5 +44,4 @@ class Auth extends Controller
         if(!Hash::check($request->password, $check->password)) return response()->json(["msg" => "Passowrd Salah"]);
         return $this->token($check);
     }
-
 }
