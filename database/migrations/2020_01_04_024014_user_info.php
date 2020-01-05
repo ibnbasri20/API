@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class UsersInfo extends Migration
+class UserInfo extends Migration
 {
     /**
      * Run the migrations.
@@ -17,8 +17,8 @@ class UsersInfo extends Migration
             $table->uuid('id')->primary();
             $table->uuid('users_id')->index();
             $table->string('first_name');
-            $table->sting('last_name');
-            $table->sting('photo')->nullable();
+            $table->string('last_name');
+            $table->string('photo')->nullable();
             $table->uuid('group_id');
         });
     }

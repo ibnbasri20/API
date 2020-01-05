@@ -5,7 +5,9 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\User;
-use Illuminate\Facades\Support\Hash;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
+use \Firebase\JWT\JWT;
 
 class Auth extends Controller
 {
@@ -21,14 +23,22 @@ class Auth extends Controller
         return response()->json(["token" => $jwt]);
     }
 
-    public function store(Type $var = null)
+    public function store(Request $request)
     {
         $check = User::where('username', $request->username)->orWhere('email', $request->email)->first();
         if($check) return response()->json(["msg" => "Email / Username Telah DiPakai"]);
-
+        $data = array(
+            'id'            => Str::uuid(),
+            'username'      => $request->username,
+            'email'         => $request->email,
+            'password'      => Hash::make($request->password),
+            'name'          => $request->name
+        );
+        User::create($data);
+        return response()->json(["msg" => "Berhasil Daftar", "email" => "Harap cek email"]);
     }
 
-    public function login(Type $var = null)
+    public function login(Request $request)
     {
         $check = User::where('username', $request->username)->orWhere('email', $request->email)->first();
         if(!$check) return response()->json(["msg" => "Data Tidak Ditemukan"]);
