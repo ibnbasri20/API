@@ -37,6 +37,11 @@ class Auth extends Controller
         return response()->json(["msg" => "Berhasil Daftar", "email" => "Harap cek email"]);
     }
 
+    public function request_reset_password(Request $request)
+    {
+        # code...
+    }
+
     public function login(Request $request)
     {
         $check = User::where('username', $request->username)->orWhere('email', $request->email)->first();
