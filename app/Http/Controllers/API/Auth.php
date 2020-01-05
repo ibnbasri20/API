@@ -39,7 +39,7 @@ class Auth extends Controller
 
     public function request_reset_password(Request $request)
     {
-        # code...
+
     }
 
     public function login(Request $request)
