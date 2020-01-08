@@ -15,18 +15,18 @@ class Events extends Migration
     {
         Schema::create('event', function (Blueprint $table)
         {
-            $table->uuid('id')->primary();
+            $table->bigInteger('id')->primary()->unsigned();
             $table->string('name');
             $table->integer('category');
-            $table->integer('category');
-            $table->integer('publisher');
+            $table->integer('sub_category');
+            $table->uuid('publisher')->index();
             $table->string('photo');
             $table->date('start');
             $table->date('end');
-            $table->integer('join_id')->unsigned();
+            $table->unsignedBigInteger('join_id')->index();
             $table->integer('views');
             $table->timestamps();
-            $table->foreign('join_id')->references('id')->on('join_event');
+            $table->foreign('publisher')->references('id')->on('users');
         });
     }
 

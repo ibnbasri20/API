@@ -15,10 +15,10 @@ class ChatUser extends Migration
     {
         Schema::create('chat', function(Blueprint $table)
         {
-            $table->uuid('id')->primary();
-            $table->uuid('user_id')->unsigned();
-            $table->integer('chat_id')->unsigned();
+            $table->bigIncrements('id');
+            $table->uuid('user_id')->index();
             $table->timestamps();
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 
@@ -29,6 +29,6 @@ class ChatUser extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_chat');
+        Schema::dropIfExists('chat');
     }
 }

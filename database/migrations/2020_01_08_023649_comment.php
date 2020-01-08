@@ -16,9 +16,9 @@ class Comment extends Migration
         Schema::create('comment', function(Blueprint $table)
         {
             $table->bigIncrements('id');
-            $table->uuid('event_id')->unsigned();
-            $table->uuid('user_id')->unsigned();
-            $table->text('comment');
+            $table->uuid('event_id');
+            $table->uuid('user_id');
+            $table->string('comment');
             $table->timestamps();
         });
     }

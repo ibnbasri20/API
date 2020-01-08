@@ -16,9 +16,11 @@ class UsersChat extends Migration
         Schema::create('user_chat', function(Blueprint $table)
         {
             $table->uuid('id')->primary();
-            $table->uuid('chat_id')->unsigned();
-            $table->text('message');
+            $table->uuid('chat_id')->index();
+            $table->string('message');
             $table->timestamps();
+            $table->foreign('chat_id')->references('id')->on('chat');
+
         });
     }
 

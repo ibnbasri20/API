@@ -13,12 +13,15 @@ class JoinEvents extends Migration
      */
     public function up()
     {
-        Schema::create('join_event', function (Blueprint $table)
+        Schema::create('event_join', function (Blueprint $table)
         {
-            $table->uuid('id')->primary();
-            $table->uuid('id_event')->index();
+            $table->bigInteger('id')->primary();
+            $table->unsignedBigInteger('id_event')->index();
             $table->uuid('id_users')->index();
+            $table->foreign('id_event')->references('id')->on('event');
+            $table->foreign('id_users')->references('id')->on('users');
         });
+        
     }
 
     /**
@@ -28,6 +31,6 @@ class JoinEvents extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('join_event');
+        Schema::dropIfExists('event_join');
     }
 }
