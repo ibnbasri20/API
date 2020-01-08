@@ -20,6 +20,7 @@ class UserInfo extends Migration
             $table->string('last_name');
             $table->string('photo')->nullable();
             $table->uuid('group_id');
+            $table->foreign('users_id')->references('id')->on('users');
         });
     }
 

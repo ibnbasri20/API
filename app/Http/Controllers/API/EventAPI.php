@@ -21,4 +21,9 @@ class EventAPI extends Controller
     {
         
     }
+
+    public function comment(Request $request,$id)
+    {
+        # code...
+    }   
 }

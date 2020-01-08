@@ -31,6 +31,6 @@ class GroupUsers extends Migration
      */
     public function down()
     {
-        Schema::dropIfExits('group_users');
+        Schema::dropIfExists('group_users');
     }
 }
