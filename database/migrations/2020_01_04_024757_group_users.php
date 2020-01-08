@@ -19,8 +19,8 @@ class GroupUsers extends Migration
             $table->string('group_name');
             $table->string('photo');
             $table->uuid('users_id')->index();
-            $table->string('lat');
-            $table->string('long');
+            $table->string('lat')->nullable();
+            $table->string('long')->nullable();
         });
     }
 
