@@ -49,7 +49,15 @@ class EventAPI extends Controller
         return response()->json(["msg" => "Event Berhasil DiHapus"]);
     }
 
-    public function comment(Request $request,$id)
+
+    public function comment($id)
+    {
+        $event = Event::where('id', $id)->first();
+        if(!$cek->fist()) return response()->json(["msg" => "Event tidak ditemukan"]);
+        $comm = Comment::where('id_event', $id);
+        return response($com->paginate(10));
+    }
+    public function send_comment(Request $request,$id)
     {
         $cek = Event::where('id', $id)->first();
         if(!$cek) return response()->json(["msg" => "Data tidak ditemukan"]);
