@@ -15,10 +15,10 @@ class ChatUser extends Migration
     {
         Schema::create('chat', function(Blueprint $table)
         {
-            $table->bigIncrements('id');
-            $table->uuid('user_id')->index();
+            $table->uuid('id')->primary();
+            $table->uuid('chat_id')->index();
+            $table->string('message');
             $table->timestamps();
-            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 
