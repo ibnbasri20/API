@@ -17,14 +17,14 @@ class Events extends Migration
         {
             $table->bigInteger('id')->primary()->unsigned();
             $table->string('name');
-            $table->integer('category');
-            $table->integer('sub_category');
+            $table->integer('category')->nullable();
+            $table->integer('sub_category')->nullable();
             $table->uuid('publisher')->index();
-            $table->string('photo');
+            $table->string('photo')->nullable();
             $table->date('start');
             $table->date('end');
-            $table->unsignedBigInteger('join_id')->index();
-            $table->integer('views');
+            $table->unsignedBigInteger('join_id')->index()->nullable();
+            $table->integer('views')->nullable();
             $table->timestamps();
             $table->foreign('publisher')->references('id')->on('users');
         });

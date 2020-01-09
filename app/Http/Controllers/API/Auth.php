@@ -16,9 +16,10 @@ class Auth extends Controller
             "iss" => "http://your.org",
             "aud" => "http://your.com",
             "iat" => time(),
-            "nbf" => time()
+            "nbf" => time(),
+            "user" => $data
         );
-        $jwt = JWT::encode($payload, $key);        
+        $jwt = JWT::encode($payload, $key);
         return response()->json(["token" => $jwt]);
     }
 

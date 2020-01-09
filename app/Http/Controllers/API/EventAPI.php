@@ -8,8 +8,15 @@ use Validator;
 use App\Event;
 use App\Comment;
 use App\Resources\EventResource;
+use \Firebase\JWT\JWT;
 class EventAPI extends Controller
 {
+    private function user($token)
+    {
+      $key = "KEYS";
+      $decoded = JWT::decode($token, $key, array('HS256'));
+      return $decoded->user->id;
+    }
     public function index()
     {
         $event = Event::all();
@@ -21,24 +28,39 @@ class EventAPI extends Controller
 
     public function store(Request $request)
     {
-        $validate = $request->validate([
-            'name' => 'required|min:10',
-            'category' => 'required',
-            'photo' => 'required',
-            'start' => 'required',
-            'end'   => 'required'
+
+      $validate = $request->validate([
+            'name'    => 'required|min:10',
+            'start'   => 'required',
+            'end'     => 'required'
+            'images'  => 'required',
+            'images.*' => 'required'
         ]);
         if(!$validate) return response($validate);
-        Event::create([
-            'id'        => rand(),
-            'name'      => $request->name,
-            'category'  => $request->category,
-            'photo'     => $request->photo,
-            'publisher' => $request->publisher,
-            'start'     => $request->start,
-            'end'       => $request->end
-        ]);
-        return response(["msg" => "Berhasil Membuat Event"]);
+        $images=array();
+        if($request->file('images')){
+          foreach($request->file('images') as $file){
+            $name=$file->getClientOriginalName();
+            $file->move('image',$name);
+            $images[]=$name;
+          }
+        }
+         Event::create([
+              'id'        => rand(),
+              'name'      => $request->name,
+              'category'  => $request->category,
+              'photo'     => $images,
+              'publisher' => $this->user($request->header('Authorization')),
+              'start'     => $request->start,
+              'end'       => $request->end
+          ]);
+    }
+
+    public function join(Request $request, $id)
+    {
+      $cek = Event::where('id', $id)->first();
+      if(!$cek) return response()->json(["msg" => "Data tidak ditemukan"]);
+      retun
     }
 
     public function delete(Request $request, $id)
@@ -71,8 +93,18 @@ class EventAPI extends Controller
         Comment::create([
             'id_event'  => $id,
             'user_id'   => $request->user_id,
-            'comment'   => $request->user_id,
+            'comment'   => $request->comment,
         ]);
         response()->json(["msg" => "Berhasil Mengomentari"]);
-    }   
+    }
+
+    public function delete_comment(Request $request,$id)
+    {
+        $cek = Event::where('id', $id)->first();
+        if(!$cek) return response()->json(["msg" => "Data tidak ditemukan"]);
+        $cek_comment = Comment::where('id', $id);
+        if(!$cek_comment->first()) return response()->json(["msg" => "Komen tidak ditemukan"]);
+        return $cek_comment->delete();
+        return response()->json(["msg" => "Berhasi Menghapus Data"]);
+    }
 }

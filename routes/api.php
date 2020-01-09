@@ -19,3 +19,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::post('/auth/registration', 'API\Auth@store');
 Route::post('/auth/login', 'API\Auth@login');
+
+Route::post('/event', 'API\EventAPI@store')->middleware('api.auth');;
