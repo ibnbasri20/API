@@ -19,7 +19,7 @@ class EventAPI extends Controller
     }
     public function index()
     {
-        $event = Event::with(['user'])->orderBy('created_at', 'DESC')->paginate(15);
+        $event = Event::with(['publisher', 'publisher_info'])->orderBy('created_at', 'DESC')->paginate(15);
         if(request()->search != ''){
             $event = $event->where('name', 'like', '%' . request()->search . '%');
         }
