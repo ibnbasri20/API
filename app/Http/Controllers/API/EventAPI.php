@@ -19,11 +19,11 @@ class EventAPI extends Controller
     }
     public function index()
     {
-        $event = Event::all();
+        $event = Event::with(['user'])->orderBy('created_at', 'DESC')->paginate(15);
         if(request()->search != ''){
             $event = $event->where('name', 'like', '%' . request()->search . '%');
         }
-        return response(Event::paginate(15));
+        return response($event);
     }
 
     public function store(Request $request)
@@ -32,12 +32,12 @@ class EventAPI extends Controller
       $validate = $request->validate([
             'name'    => 'required|min:10',
             'start'   => 'required',
-            'end'     => 'required'
+            'end'     => 'required',
             'images'  => 'required',
             'images.*' => 'required'
         ]);
         if(!$validate) return response($validate);
-        $images=array();
+        $images = [];
         if($request->file('images')){
           foreach($request->file('images') as $file){
             $name=$file->getClientOriginalName();
@@ -60,7 +60,6 @@ class EventAPI extends Controller
     {
       $cek = Event::where('id', $id)->first();
       if(!$cek) return response()->json(["msg" => "Data tidak ditemukan"]);
-      retun
     }
 
     public function delete(Request $request, $id)
