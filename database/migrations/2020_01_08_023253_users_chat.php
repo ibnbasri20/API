@@ -13,15 +13,14 @@ class UsersChat extends Migration
      */
     public function up()
     {
-        Schema::create('user_chat', function(Blueprint $table)
-        {
-            $table->bigIncrements('id');
-            $table->uuid('user_id')->index();
+        Schema::create('messages', function (Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedInteger('received_id')->index();
+            $table->unsignedInteger('sender_id')->index();
+            $table->text('message');
             $table->timestamps();
-            $table->foreign('user_id')->references('id')->on('users');
         });
     }
-
     /**
      * Reverse the migrations.
      *
@@ -29,6 +28,6 @@ class UsersChat extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_chat');
+        Schema::dropIfExists('messages');
     }
 }
