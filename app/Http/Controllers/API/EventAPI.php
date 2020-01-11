@@ -9,6 +9,7 @@ use App\Event;
 use App\Comment;
 use App\Resources\EventResource;
 use \Firebase\JWT\JWT;
+use Storage;
 class EventAPI extends Controller
 {
     private function user($token)
@@ -29,31 +30,38 @@ class EventAPI extends Controller
     public function store(Request $request)
     {
 
-      $validate = $request->validate([
-            'name'    => 'required|min:10',
-            'start'   => 'required',
-            'end'     => 'required',
-            'images'  => 'required',
-            'images.*' => 'required'
+        $this->validate($request, [
+            'images.*' => 'required|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
-        if(!$validate) return response($validate);
-        $images = [];
-        if($request->file('images')){
-          foreach($request->file('images') as $file){
-            $name=$file->getClientOriginalName();
-            $file->move('image',$name);
-            $images[]=$name;
-          }
+        
+        if(! is_null(request()->file('images'))){
+            $files = $request->file('images');
+            $file_count = count($files);
+            $uploadcount = 0;
+            $nama = array();
+            foreach($files as $file) {
+                $destinationPath = 'uploads';
+                $filename = $file->getClientOriginalName();
+                $upload_success = $file->move($destinationPath, $filename);
+                $nama[] = date('Y-m-d-H:i:s')."-".$file->getClientOriginalName();
+                $uploadcount ++;
+            }
+            Event::create([
+                'id'        => rand(),
+                'name'      => $request->name,
+                'category'  => $request->category,
+                'photo'     => $nama,
+                'publisher' => $this->user($request->header('Authorization')),
+                'start'     => $request->start,
+                'end'       => $request->end
+            ]);
+            return response("Berhasil Menambahkan Event");
+
         }
-         Event::create([
-              'id'        => rand(),
-              'name'      => $request->name,
-              'category'  => $request->category,
-              'photo'     => $images,
-              'publisher' => $this->user($request->header('Authorization')),
-              'start'     => $request->start,
-              'end'       => $request->end
-          ]);
+
+
+
+    
     }
 
     public function join(Request $request, $id)
