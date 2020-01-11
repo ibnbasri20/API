@@ -29,8 +29,8 @@ class EventAPI extends Controller
 
     public function store(Request $request)
     {
-
-        $this->validate($request, [
+        $request->validate([
+            'images' => 'required',
             'images.*' => 'required|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
         
@@ -46,22 +46,18 @@ class EventAPI extends Controller
                 $nama[] = date('Y-m-d-H:i:s')."-".$file->getClientOriginalName();
                 $uploadcount ++;
             }
+
             Event::create([
                 'id'        => rand(),
                 'name'      => $request->name,
                 'category'  => $request->category,
-                'photo'     => $nama,
+                'photo'     => implode(",", $nama),
                 'publisher' => $this->user($request->header('Authorization')),
                 'start'     => $request->start,
                 'end'       => $request->end
             ]);
-            return response("Berhasil Menambahkan Event");
-
+            return response("Berhasil");
         }
-
-
-
-    
     }
 
     public function join(Request $request, $id)

@@ -28,7 +28,6 @@ class ChatAPI extends Controller
     {
 
         $lastMessages = Chat::where('sender_id', $this->user($request->header('Authorization')))->groupBy('received_id')->orderBy('received_id', 'desc')->orderBy('id', 'desc')->latest('created_at')->paginate(10);
-
         return $lastMessages;
     }
 
@@ -41,6 +40,6 @@ class ChatAPI extends Controller
             'message' => $request->message,
             'received_id'  => $request->penerima
         ]);
-        event(new MessageSent($message));        
+        event(new MessageSent($message));
     }
 }

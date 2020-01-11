@@ -25,17 +25,23 @@ class Auth extends Controller
 
     public function store(Request $request)
     {
+        $request->validate([
+            'username'      => 'required|unique:users',
+            'email'         => 'required|email|unique:users',
+            'password'      => 'required|min:6',
+            'name'          => 'required' 
+        ]);
         $check = User::where('username', $request->username)->orWhere('email', $request->email)->first();
         if($check) return response()->json(["msg" => "Email / Username Telah DiPakai"]);
         $data = array(
-            'id'            => Str::uuid(),
+            'id'            => rand(),
             'username'      => $request->username,
             'email'         => $request->email,
             'password'      => Hash::make($request->password),
             'name'          => $request->name
         );
         User::create($data);
-        return response()->json(["msg" => "Berhasil Daftar", "email" => "Harap cek email"]);
+        return response()->json(["msg" => "Berhasil Daftar"]);
     }
 
     public function request_reset_password(Request $request)
@@ -45,6 +51,10 @@ class Auth extends Controller
 
     public function login(Request $request)
     {
+        $request->validate([
+            'username'      => 'required',
+            'password'      => 'required',
+        ]);
         $check = User::where('username', $request->username)->orWhere('email', $request->email)->first();
         if(!$check) return response()->json(["msg" => "Data Tidak Ditemukan"]);
         if(!Hash::check($request->password, $check->password)) return response()->json(["msg" => "Passowrd Salah"]);
