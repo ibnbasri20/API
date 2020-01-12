@@ -45,7 +45,7 @@ class EventAPI extends Controller
                 $nama[] = date('Y-m-d-H:i:s')."-".$file->getClientOriginalName();
                 $uploadcount ++;
             }
-            Event::create([
+            $data = Event::firstOrCreate([
                 'id'        => rand(),
                 'name'      => $request->name,
                 'category'  => $request->category,
@@ -54,16 +54,12 @@ class EventAPI extends Controller
                 'start'     => $request->start,
                 'end'       => $request->end
             ]);
+            if(!$data){
+                return response('Harap isi');
+            }
             return response("Berhasil");
         }
     }
-
-/*    public function show($id)
-    {
-        $cek = Event::with(['comment'])->where('id', $id)->first();
-        if(!$cek) return response()->json(["msg" => "Data tidak ditemukan"]);
-        return response()->json(["data" => $cek]);
-    }*/
 
     public function join(Request $request, $id)
     {
@@ -81,19 +77,20 @@ class EventAPI extends Controller
 
     public function show($id)
     {
-        $cek = Event::where('id', $id)->with("comment")->get();
+        $cek = Event::where('id', $id)->get();
+        $comment = Comment::where('event_id', $id)->paginate(10);
         if(!$cek) return response()->json(["msg" => "Event tidak ditemukan"]);
-        return response()->json(["event" => $cek]);
+        return response()->json(["event" => $cek, "comment" => $comment]);
     }
 
 
-    public function comment($id)
+/*    public function comment($id)
     {
         $event = Event::where('id', $id)->first();
         if(!$event) return response()->json(["msg" => "Event tidak ditemukan"]);
         $comm = Comment::where('id_event', $id);
         return response($comm->first());
-    }
+    }*/
     public function send_comment(Request $request,$id)
     {
         $cek = Event::where('id', $id)->first();
