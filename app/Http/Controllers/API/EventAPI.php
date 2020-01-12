@@ -33,7 +33,6 @@ class EventAPI extends Controller
             'images' => 'required',
             'images.*' => 'required|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
-        
         if(! is_null(request()->file('images'))){
             $files = $request->file('images');
             $file_count = count($files);
@@ -46,7 +45,6 @@ class EventAPI extends Controller
                 $nama[] = date('Y-m-d-H:i:s')."-".$file->getClientOriginalName();
                 $uploadcount ++;
             }
-
             Event::create([
                 'id'        => rand(),
                 'name'      => $request->name,
@@ -59,6 +57,13 @@ class EventAPI extends Controller
             return response("Berhasil");
         }
     }
+
+/*    public function show($id)
+    {
+        $cek = Event::with(['comment'])->where('id', $id)->first();
+        if(!$cek) return response()->json(["msg" => "Data tidak ditemukan"]);
+        return response()->json(["data" => $cek]);
+    }*/
 
     public function join(Request $request, $id)
     {
@@ -76,18 +81,18 @@ class EventAPI extends Controller
 
     public function show($id)
     {
-        $cek = Event::where('id', $id);
-        if(!$cek->fist()) return response()->json(["msg" => "Event tidak ditemukan"]);
-        return response()->json(["event" => $cek , "comment" => $this->comment($id)]);
+        $cek = Event::where('id', $id)->with("comment")->get();
+        if(!$cek) return response()->json(["msg" => "Event tidak ditemukan"]);
+        return response()->json(["event" => $cek]);
     }
 
 
     public function comment($id)
     {
         $event = Event::where('id', $id)->first();
-        if(!$cek->fist()) return response()->json(["msg" => "Event tidak ditemukan"]);
+        if(!$event) return response()->json(["msg" => "Event tidak ditemukan"]);
         $comm = Comment::where('id_event', $id);
-        return response($comm->paginate(10));
+        return response($comm->first());
     }
     public function send_comment(Request $request,$id)
     {

@@ -17,5 +17,9 @@ class Event extends Model
     {
       return $this->belongsTo('App\UserInfo', 'publisher', 'users_id');
     }
+    public function comment()
+    {
+      return $this->belongsTo('App\Comment', 'id','event_id');
+    }
 
 }

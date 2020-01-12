@@ -22,6 +22,7 @@ Route::post('/auth/login', 'API\Auth@login');
 
 Route::post('/event', 'API\EventAPI@store')->middleware('api.auth');
 Route::get('/event', 'API\EventAPI@index')->middleware('api.auth');
+Route::get('/event/{id}', 'API\EventAPI@show')->middleware('api.auth');
 
 Route::post('/msg', 'API\ChatAPI@sendchat')->middleware('api.auth');
 Route::get('/msg', 'API\ChatAPI@getLatest')->middleware('api.auth');
