@@ -23,6 +23,9 @@ class Events extends Migration
             $table->string('photo')->nullable();
             $table->date('start');
             $table->date('end');
+            $table->double('lat');
+            $table->double('long');
+            $table->longText('location');
             $table->unsignedBigInteger('join_id')->index()->nullable();
             $table->integer('views')->nullable();
             $table->timestamps();
