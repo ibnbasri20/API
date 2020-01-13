@@ -79,7 +79,7 @@ class EventAPI extends Controller
     public function delete(Request $request, $id)
     {
         $cek = Event::where('id', $id);
-        if(!$cek->fist()) return response()->json(["msg" => "Event tidak ditemukan"]);
+        if(!$cek->first()) return response()->json(["msg" => "Event tidak ditemukan"]);
         $cek->delete();
         return response()->json(["msg" => "Event Berhasil DiHapus"]);
     }
