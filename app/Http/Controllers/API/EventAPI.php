@@ -30,8 +30,14 @@ class EventAPI extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'images' => 'required',
-            'images.*' => 'required|mimes:jpeg,png,jpg,gif,svg|max:2048'
+            'name'      => 'required',
+            'location'  => 'required',
+            'lat'       => 'required',
+            'long'      => 'required',
+            'start'     => 'required',
+            'end'       => 'required',
+            'images'    => 'required',
+            'images.*'  => 'required|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
         if(! is_null(request()->file('images'))){
             $files = $request->file('images');
@@ -45,11 +51,14 @@ class EventAPI extends Controller
                 $nama[] = date('Y-m-d-H:i:s')."-".$file->getClientOriginalName();
                 $uploadcount ++;
             }
-            $data = Event::firstOrCreate([
+            $data = Event::Create([
                 'id'        => rand(),
                 'name'      => $request->name,
                 'category'  => $request->category,
                 'photo'     => implode(",", $nama),
+                'lat'       => $request->lat,
+                'long'      => $request->long,
+                'location'  => $request->location,
                 'publisher' => $this->user($request->header('Authorization')),
                 'start'     => $request->start,
                 'end'       => $request->end
