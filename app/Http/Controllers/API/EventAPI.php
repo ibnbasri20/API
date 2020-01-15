@@ -10,6 +10,7 @@ use App\Resources\EventResource;
 use \Firebase\JWT\JWT;
 use App\Events\EventListener;
 use App\Events;
+use Illuminate\Support\Facades\DB;
 class EventAPI extends Controller
 {
     private function user($token)
@@ -32,8 +33,8 @@ class EventAPI extends Controller
         $request->validate([
             'name'      => 'required',
             'location'  => 'required',
-            'lat'       => 'required',
-            'long'      => 'required',
+//            'lat'       => 'required',
+//            'long'      => 'required',
             'start'     => 'required',
             'end'       => 'required',
             'images'    => 'required',
@@ -84,7 +85,14 @@ class EventAPI extends Controller
     {
       $cek = Events::where('id', $id)->first();
       if(!$cek) return response()->json(["msg" => "Data tidak ditemukan"]);
-      
+      $data = array(
+          'id'            => rand(),
+          'id_users'      => $this->user($request->header('Authorization')),
+          'id_event'      => $id
+      );
+      $join  = DB::table('event_join')->insert($data);
+      if(!$join) return response()->json(["msg" => "Gagal Join"]);
+      return response(["msg" => "Ada Akan Mengikuti Event ini"]);
     }
 
     public function delete(Request $request, $id)
