@@ -117,14 +117,6 @@ class EventAPI extends Controller
         return response()->json(["event" => $cek, "comment" => $comment]);
     }
 
-
-/*    public function comment($id)
-    {
-        $event = Event::where('id', $id)->first();
-        if(!$event) return response()->json(["msg" => "Event tidak ditemukan"]);
-        $comm = Comment::where('id_event', $id);
-        return response($comm->first());
-    }*/
     public function send_comment(Request $request,$id)
     {
         $cek = Events::where('id', $id)->first();
