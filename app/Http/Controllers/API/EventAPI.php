@@ -20,7 +20,7 @@ class EventAPI extends Controller
     }
     public function index()
     {
-        $event = Event::with(['publisher', 'publisher_info'])->orderBy('created_at', 'DESC')->paginate(15);
+        $event = Events::with(['publisher', 'publisher_info'])->orderBy('created_at', 'DESC')->paginate(15);
         if(request()->search != ''){
             $event = $event->where('name', 'like', '%' . request()->search . '%');
         }
@@ -82,13 +82,14 @@ class EventAPI extends Controller
 
     public function join(Request $request, $id)
     {
-      $cek = Event::where('id', $id)->first();
+      $cek = Events::where('id', $id)->first();
       if(!$cek) return response()->json(["msg" => "Data tidak ditemukan"]);
+      
     }
 
     public function delete(Request $request, $id)
     {
-        $cek = Event::where('id', $id);
+        $cek = Events::where('id', $id);
         if(!$cek->first()) return response()->json(["msg" => "Event tidak ditemukan"]);
         $cek->delete();
         return response()->json(["msg" => "Event Berhasil DiHapus"]);
@@ -96,7 +97,7 @@ class EventAPI extends Controller
 
     public function show($id)
     {
-        $cek = Event::where('id', $id)->get();
+        $cek = Events::where('id', $id)->get();
         $comment = Comment::where('event_id', $id)->paginate(10);
         if(!$cek) return response()->json(["msg" => "Event tidak ditemukan"]);
         return response()->json(["event" => $cek, "comment" => $comment]);
@@ -112,7 +113,7 @@ class EventAPI extends Controller
     }*/
     public function send_comment(Request $request,$id)
     {
-        $cek = Event::where('id', $id)->first();
+        $cek = Events::where('id', $id)->first();
         if(!$cek) return response()->json(["msg" => "Data tidak ditemukan"]);
         Comment::create([
             'id_event'  => $id,
@@ -124,7 +125,7 @@ class EventAPI extends Controller
 
     public function delete_comment(Request $request,$id)
     {
-        $cek = Event::where('id', $id)->first();
+        $cek = Events::where('id', $id)->first();
         if(!$cek) return response()->json(["msg" => "Data tidak ditemukan"]);
         $cek_comment = Comment::where('id', $id);
         if(!$cek_comment->first()) return response()->json(["msg" => "Komen tidak ditemukan"]);
