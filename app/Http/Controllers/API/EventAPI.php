@@ -90,6 +90,12 @@ class EventAPI extends Controller
           'id_users'      => $this->user($request->header('Authorization')),
           'id_event'      => $id
       );
+      $c_join = DB::table('event_join')->where(function($query) use ($id,$request) {
+        $query->where('id_users', $this->user($request->header('Authorization')))
+              ->where('id_event',$id);
+      })->first();
+
+      if($c_join) return response()->json(["msg" => " Ada Sudah Mengikuti"]);
       $join  = DB::table('event_join')->insert($data);
       if(!$join) return response()->json(["msg" => "Gagal Join"]);
       return response(["msg" => "Ada Akan Mengikuti Event ini"]);
