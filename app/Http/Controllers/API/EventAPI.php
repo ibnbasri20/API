@@ -32,8 +32,8 @@ class EventAPI extends Controller
         $request->validate([
             'name'      => 'required',
             'location'  => 'required',
-//            'lat'       => 'required',
-//            'long'      => 'required',
+            'lat'       => 'required',
+            'long'      => 'required',
             'start'     => 'required',
             'end'       => 'required',
             'images'    => 'required',
