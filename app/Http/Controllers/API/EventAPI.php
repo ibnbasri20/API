@@ -9,6 +9,7 @@ use App\Comment;
 use App\Resources\EventResource;
 use \Firebase\JWT\JWT;
 use App\Events\EventListener;
+use App\Events;
 class EventAPI extends Controller
 {
     private function user($token)
