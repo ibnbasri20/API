@@ -39,7 +39,7 @@ class User extends Authenticatable
 
     public function event()
     {
-      return $this->hasMany('App\Event', 'id');
+      return $this->hasMany('App\Events', 'id');
     }
     public function messages()
     {

@@ -5,11 +5,10 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Validator;
-use App\Event;
 use App\Comment;
 use App\Resources\EventResource;
 use \Firebase\JWT\JWT;
-use Storage;
+use App\Events\EventListener;
 class EventAPI extends Controller
 {
     private function user($token)
@@ -32,8 +31,8 @@ class EventAPI extends Controller
         $request->validate([
             'name'      => 'required',
             'location'  => 'required',
-            'lat'       => 'required',
-            'long'      => 'required',
+//            'lat'       => 'required',
+//            'long'      => 'required',
             'start'     => 'required',
             'end'       => 'required',
             'images'    => 'required',
@@ -51,7 +50,19 @@ class EventAPI extends Controller
                 $nama[] = date('Y-m-d-H:i:s')."-".$file->getClientOriginalName();
                 $uploadcount ++;
             }
-            $data = Event::Create([
+            $events = array(
+                'id'        => rand(),
+                'name'      => $request->name,
+                'category'  => $request->category,
+                'photo'     => implode(",", $nama),
+                'lat'       => $request->lat,
+                'long'      => $request->long,
+                'location'  => $request->location,
+                'publisher' => $this->user($request->header('Authorization')),
+                'start'     => $request->start,
+                'end'       => $request->end
+            );
+            \App\Events::create([
                 'id'        => rand(),
                 'name'      => $request->name,
                 'category'  => $request->category,
@@ -63,10 +74,8 @@ class EventAPI extends Controller
                 'start'     => $request->start,
                 'end'       => $request->end
             ]);
-            if(!$data){
-                return response('Harap isi');
-            }
-            return response("Berhasil");
+            event(new EventListener($events));
+            return response(["msg" => "Berhasil Menambahkan Data"]);
         }
     }
 

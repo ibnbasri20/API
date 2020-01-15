@@ -18,7 +18,7 @@ class JoinEvents extends Migration
             $table->bigInteger('id')->primary();
             $table->unsignedBigInteger('id_event')->index();
             $table->uuid('id_users')->index();
-            $table->foreign('id_event')->references('id')->on('event');
+            $table->foreign('id_event')->references('id')->on('events');
             $table->foreign('id_users')->references('id')->on('users');
         });
         

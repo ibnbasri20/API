@@ -11,7 +11,7 @@ class Comment extends Model
 
     public function event()
     {
-      return $this->hasMany('App\Event', 'id_event');
+      return $this->hasMany('App\Events', 'id_event');
     }
 
 }

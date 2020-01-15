@@ -13,7 +13,7 @@ class Events extends Migration
      */
     public function up()
     {
-        Schema::create('event', function (Blueprint $table)
+        Schema::create('events', function (Blueprint $table)
         {
             $table->bigInteger('id')->primary()->unsigned();
             $table->string('name');
@@ -26,7 +26,6 @@ class Events extends Migration
             $table->double('lat');
             $table->double('long');
             $table->longText('location');
-            $table->unsignedBigInteger('join_id')->index()->nullable();
             $table->integer('views')->nullable();
             $table->timestamps();
             $table->foreign('publisher')->references('id')->on('users');

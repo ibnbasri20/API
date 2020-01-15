@@ -7,6 +7,7 @@ use App\User;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use \Firebase\JWT\JWT;
+use App\Events\UserListener;
 
 class Auth extends Controller
 {
@@ -58,6 +59,7 @@ class Auth extends Controller
         $check = User::where('username', $request->username)->orWhere('email', $request->email)->first();
         if(!$check) return response()->json(["msg" => "Data Tidak Ditemukan"]);
         if(!Hash::check($request->password, $check->password)) return response()->json(["msg" => "Passowrd Salah"]);
+        event(new UserListener('Berhasl Login'));
         return $this->token($check);
     }
 }

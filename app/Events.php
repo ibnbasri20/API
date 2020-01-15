@@ -3,12 +3,11 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use App\User;
-class Event extends Model
-{
-    protected $table = "event";
-    protected $fillable = ['id', 'name','category', 'sub_category', 'publisher', 'photo', 'start', 'end', 'join_id','views'];
 
+class Events extends Model
+{
+    protected $primarykey = 'id';
+    protected $fillable = ['id', 'name','category', 'sub_category', 'publisher', 'photo', 'start', 'end', 'join_id','views'];
     public function publisher()
     {
       return $this->belongsTo('App\User', 'publisher');
