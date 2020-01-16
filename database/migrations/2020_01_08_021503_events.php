@@ -26,7 +26,7 @@ class Events extends Migration
             $table->double('lat');
             $table->double('long');
             $table->longText('location');
-            $table->integer('views')->nullable();
+            $table->unsignedBigInteger('group_id')->index();
             $table->timestamps();
             $table->foreign('publisher')->references('id')->on('users');
         });

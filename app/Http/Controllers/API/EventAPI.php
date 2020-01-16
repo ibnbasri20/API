@@ -10,6 +10,8 @@ use App\Resources\EventResource;
 use \Firebase\JWT\JWT;
 use App\Events\EventListener;
 use App\Events;
+use App\EventGroup;
+use App\Groups;
 use Illuminate\Support\Facades\DB;
 class EventAPI extends Controller
 {
@@ -52,6 +54,7 @@ class EventAPI extends Controller
                 $nama[] = date('Y-m-d-H:i:s')."-".$file->getClientOriginalName();
                 $uploadcount ++;
             }
+            
             $events = array(
                 'id'        => rand(),
                 'name'      => $request->name,
@@ -64,6 +67,9 @@ class EventAPI extends Controller
                 'start'     => $request->start,
                 'end'       => $request->end
             );
+            $group = Groups::create([
+                'name' =>  $request->name
+            ]);
             \App\Events::create([
                 'id'        => rand(),
                 'name'      => $request->name,
@@ -74,10 +80,17 @@ class EventAPI extends Controller
                 'location'  => $request->location,
                 'publisher' => $this->user($request->header('Authorization')),
                 'start'     => $request->start,
-                'end'       => $request->end
+                'end'       => $request->end,
+                'group_id'  => $group->id
+            ]);
+            EventGroup::create([
+                'id'            => rand(),
+                'group_id'      => $group->id,
+                'users_id'      => $this->user($request->header('Authorization')),
+                'admin'         => 1
             ]);
             event(new EventListener($events));
-            return response(["msg" => "Berhasil Menambahkan Data"]);
+            return response(["msg" => "Berhasil Menambahkan Data", "data" => $group->id]);
         }
     }
 
@@ -97,6 +110,12 @@ class EventAPI extends Controller
 
       if($c_join) return response()->json(["msg" => " Ada Sudah Mengikuti"]);
       $join  = DB::table('event_join')->insert($data);
+        EventGroup::create([
+            'id'            => rand(),
+            'group_id'      => $cek->group_id,
+            'users_id'      => $this->user($request->header('Authorization')),
+            'admin'         => 0
+        ]);
       if(!$join) return response()->json(["msg" => "Gagal Join"]);
       return response(["msg" => "Ada Akan Mengikuti Event ini"]);
     }

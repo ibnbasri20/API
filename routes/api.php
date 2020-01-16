@@ -27,3 +27,6 @@ Route::get('/event/join/{id}', 'API\EventAPI@join')->middleware('api.auth');
 
 Route::post('/msg', 'API\ChatAPI@sendchat')->middleware('api.auth');
 Route::get('/msg', 'API\ChatAPI@getLatest')->middleware('api.auth');
+Route::post('/chat/group', 'API\ChatAPI@send_group_chat')->middleware('api.auth');
+Route::get('/chat/group', 'API\ChatAPI@get_latest_group')->middleware('api.auth');
+Route::get('/chat/group/{id}', 'API\ChatAPI@get_latest_chat_group')->middleware('api.auth');

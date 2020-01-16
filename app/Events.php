@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Events extends Model
 {
     protected $primarykey = 'id';
-    protected $fillable = ['id', 'name','category', 'sub_category', 'publisher', 'photo', 'start', 'end', 'join_id','views'];
+    protected $fillable = ['id', 'name','category', 'sub_category', 'group_id' ,'publisher', 'photo', 'start', 'end', 'join_id','views'];
     public function publisher()
     {
       return $this->belongsTo('App\User', 'publisher');
