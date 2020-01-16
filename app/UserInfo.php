@@ -14,5 +14,10 @@ class UserInfo extends Model
     {
       return $this->hasMany('App\Event', 'users_id');
     }
+    public function group()
+    {
+      return $this->hasMany('App\GroupChat', 'users_id');
+    }
+
 
 }

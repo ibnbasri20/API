@@ -69,7 +69,7 @@ class ChatAPI extends Controller
         $lastMessages = GroupChat::where(function($query) use ($id,$request) {
             $query->where('id_users', $this->user($request->header('Authorization')))
                   ->where('group_id', $id);
-          })->latest('created_at')->paginate(10);
+          })->with(['get_group','get_information_group','get_user','user_info'])->latest('created_at')->paginate(10);
         return $lastMessages;
     }
 }
