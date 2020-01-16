@@ -60,7 +60,7 @@ class ChatAPI extends Controller
 
     public function get_latest_group(Request $request)
     {
-        $lastMessages = GroupChat::where('id_users', $this->user($request->header('Authorization')))->with(['get_group','get_information_group'])->groupBy('group_id')->orderBy('group_id', 'desc')->orderBy('id', 'desc')->latest('created_at')->paginate(10);
+        $lastMessages = GroupChat::where('id_users', $this->user($request->header('Authorization')))->with(['get_group','get_information_group','get_user','user_info'])->groupBy('group_id')->orderBy('group_id', 'desc')->orderBy('id', 'desc')->latest('created_at')->paginate(10);
         return response()->json(["data" => $lastMessages]);
     }
 

@@ -21,5 +21,9 @@ class GroupChat extends Model
     {
         return $this->belongsTo('App\User', 'id_users', 'id');
     }
+    public function user_info()
+    {
+      return $this->belongsTo('App\UserInfo', 'id_users', 'users_id');
+    }
 
 }
